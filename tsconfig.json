@@ -1,27 +1,16 @@
 {
   "compilerOptions": {
     "rootDir": "./src",
-    "strict": false,                 // Dezactivează regulile foarte dure
-    "strictNullChecks": false,       // Rezolvă erorile cu 'null' și 'undefined'
-    "noImplicitAny": false,
+    "strict": false,
+    "strictNullChecks": false,
     "module": "commonjs",
-    "declaration": false,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "noLib": false,
-    "lib": ["es2017"],
+    "target": "es6",
+    "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
     "sourceMap": true,
-    "allowJs": true,
-    "outDir": "./dist"
+    "allowJs": true
   },
-    "include": [
-    "src/**/*"
-  ],
-    "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
