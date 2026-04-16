@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { ProfileModule } from './profile/profile.module';
 import { TagModule } from './tag/tag.module';
+import { HealthController } from './health/health.controller';
+
 
 @Module({
   imports: [
@@ -16,7 +18,8 @@ import { TagModule } from './tag/tag.module';
     TagModule
   ],
   controllers: [
-    AppController
+    AppController,
+    HealthController
   ],
   providers: []
 })
