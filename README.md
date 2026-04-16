@@ -9,6 +9,15 @@
 
 # Getting started
 
+## Quick Start with Docker (Added by me)
+
+I have containerized this application for easier development.
+
+1. Make sure you have Docker installed.
+2. Run the following command:
+   ```bash
+   docker-compose up --build
+
 ## Installation
 
 Clone the repository
