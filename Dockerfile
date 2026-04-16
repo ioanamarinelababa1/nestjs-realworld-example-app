@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Compilăm codul folosind scriptul tău existent (prestart:prod rulează tsc)
-RUN npm run prestart:prod
+RUN npx tsc --project tsconfig.json --rootDir src --outDir dist
 
 EXPOSE 3000
 
