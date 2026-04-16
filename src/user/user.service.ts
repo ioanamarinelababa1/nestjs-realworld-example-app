@@ -22,22 +22,17 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async findOne({email, password}: LoginUserDto): Promise<UserEntity> {
+  async findOne({email, password}: LoginUserDto): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({email});
-    if (!user) {
-      return null;
-    }
+    if (!user) return null;
 
     if (await argon2.verify(user.password, password)) {
       return user;
     }
-
     return null;
   }
 
   async create(dto: CreateUserDto): Promise<UserRO> {
-
-    // check uniqueness of username/email
     const {username, email, password} = dto;
     const qb = await getRepository(UserEntity)
       .createQueryBuilder('user')
@@ -49,10 +44,8 @@ export class UserService {
     if (user) {
       const errors = {username: 'Username and email must be unique.'};
       throw new HttpException({message: 'Input data validation failed', errors}, HttpStatus.BAD_REQUEST);
-
     }
 
-    // create new user
     let newUser = new UserEntity();
     newUser.username = username;
     newUser.email = email;
@@ -63,20 +56,25 @@ export class UserService {
     if (errors.length > 0) {
       const _errors = {username: 'Userinput is not valid.'};
       throw new HttpException({message: 'Input data validation failed', _errors}, HttpStatus.BAD_REQUEST);
-
     } else {
       const savedUser = await this.userRepository.save(newUser);
       return this.buildUserRO(savedUser);
     }
-
   }
 
   async update(id: number, dto: UpdateUserDto): Promise<UserEntity> {
-    let toUpdate = await this.userRepository.findOne(id);
-    delete toUpdate.password;
-    delete toUpdate.favorites;
+    const toUpdate = await this.userRepository.findOne(id);
+    
+    if (!toUpdate) {
+      throw new HttpException({errors: {User: 'not found'}}, HttpStatus.NOT_FOUND);
+    }
 
-    let updated = Object.assign(toUpdate, dto);
+    // Folosim Type Casting ca să "păcălim" compilatorul
+    const userToUpdate: any = toUpdate;
+    delete userToUpdate.password;
+    delete userToUpdate.favorites;
+
+    const updated = Object.assign(userToUpdate, dto);
     return await this.userRepository.save(updated);
   }
 
@@ -88,8 +86,7 @@ export class UserService {
     const user = await this.userRepository.findOne(id);
 
     if (!user) {
-      const errors = {User: ' not found'};
-      throw new HttpException({errors}, 401);
+      throw new HttpException({errors: {User: 'not found'}}, 401);
     }
 
     return this.buildUserRO(user);
@@ -97,10 +94,13 @@ export class UserService {
 
   async findByEmail(email: string): Promise<UserRO>{
     const user = await this.userRepository.findOne({email: email});
+    if (!user) {
+      throw new HttpException({errors: {User: 'not found'}}, 404);
+    }
     return this.buildUserRO(user);
   }
 
-  public generateJWT(user) {
+  public generateJWT(user: any) {
     let today = new Date();
     let exp = new Date(today);
     exp.setDate(today.getDate() + 60);
