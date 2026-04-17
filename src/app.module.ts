@@ -9,7 +9,16 @@ import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'db',
+      port: 5432,
+      username: 'user',
+      password: 'pass',
+      database: 'nestjsrealworld',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true
+    }),
     ArticleModule,
     UserModule,
     ProfileModule,
