@@ -11,7 +11,7 @@
 
 ## Quick Start with Docker (Added by me)
 
-I have containerized this application for easier development.
+I have containerized this application for easier development on any enviroment.
 
 1. Make sure you have Docker installed.
 2. Run the following command:
