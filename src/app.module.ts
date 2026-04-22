@@ -7,6 +7,7 @@ import { Connection } from 'typeorm';
 import { ProfileModule } from './profile/profile.module';
 import { TagModule } from './tag/tag.module';
 import { HealthController } from './health/health.controller';
+import { InfoController } from './info/info.controller';
 
 
 @Module({
@@ -28,7 +29,8 @@ import { HealthController } from './health/health.controller';
   ],
   controllers: [
     AppController,
-    HealthController
+    HealthController,
+    InfoController
   ],
   providers: []
 })
